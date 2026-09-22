@@ -103,7 +103,6 @@
             opacity: 0.9;
         }
 
-        /* Блок галереи */
         .gallery-section {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
@@ -150,7 +149,6 @@
             border-radius: 10px;
         }
 
-        /* Общие стили для анимации всех сердечек */
         .heart {
             position: absolute;
             bottom: -50px;
@@ -251,7 +249,6 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // Функция создания одного любого сердечка
         function spawnSingleHeart(icon) {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -259,10 +256,10 @@
             
             heart.style.left = Math.random() * 100 + 'vw';
             
-            const size = Math.random() * 20 + 18; // размер от 18px до 38px
+            const size = Math.random() * 20 + 18;
             heart.style.fontSize = size + 'px';
             
-            heart.style.animationDuration = Math.random() * 4 + 3 + 's'; // плавный полет 3-7 сек
+            heart.style.animationDuration = Math.random() * 4 + 3 + 's';
             
             heart.style.setProperty('--random-x', (Math.random() * 300 - 150) + 'px');
             heart.style.setProperty('--random-rot', (Math.random() * 360) + 'deg');
@@ -273,10 +270,23 @@
                 heart.remove();
             }, 7000);
         }
-        // Постоянный автоматический полет обычных сердечек
+
         const normalHeartsList = ['❤️', '💖', '💝', '💕'];
         setInterval(() => {
             const randomIcon = normalHeartsList[Math.floor(Math.random() * normalHeartsList.length)];
             spawnSingleHeart(randomIcon);
-        }, 600); // Новое фоновое сердечко появляется каждые 0.6 секунды
-// Взрыв ОГНЕННЫХ сердечек при клике на кнопку «Любовь»function createFireHearts() {const fireIcons = ['🔥', '❤️', '🔥', '❤️'];for (let i = 0; i < 35; i++) {setTimeout(() => {const randomFireIcon = fireIcons[Math.floor(Math.random() * fireIcons.length)];spawnSingleHeart(randomFireIcon);}, i * 60);}}
+        }, 600);
+
+        function createFireHearts() {
+            const fireIcons = ['🔥', '❤️', '🔥', '❤️'];
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    const randomFireIcon = fireIcons[Math.floor(Math.random() * fireIcons.length)];
+                    spawnSingleHeart(randomFireIcon);
+                }, i * 60);
+<FollowUp>
+<FollowUp>
+Попробуйте обновить ваш файл этим кодом. Если всё запустилось как надо, хотите ли вы добавить:
+* **Музыкальное сопровождение** (чтобы при клике на «Любовь» включался трек)
+* **Эффект увеличения фото**, если Ксюша нажмет на какую-то из 24 карточек в галерее?
+</FollowUp>
