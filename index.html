@@ -55,18 +55,15 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, background 0.2s;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
         }
 
         .btn:hover {
             background: linear-gradient(45deg, #ff758f, #ffb3c1);
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
         }
 
         .timer-title {
@@ -89,7 +86,6 @@
             padding: 10px 15px;
             border-radius: 12px;
             min-width: 60px;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
         }
 
         .timer-num {
@@ -103,6 +99,58 @@
             opacity: 0.9;
         }
 
+        /* Постоянный фон из CSS-сердечек */
+        .background-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .bg-heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 24px;
+            animation: floatUp 6s infinite linear;
+            opacity: 0;
+        }
+
+        /* Разные дорожки для плавного взлета */
+        .bg-heart:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 5s; }
+        .bg-heart:nth-child(2) { left: 25%; animation-delay: 1.5s; animation-duration: 7s; }
+        .bg-heart:nth-child(3) { left: 45%; animation-delay: 3s; animation-duration: 6s; }
+        .bg-heart:nth-child(4) { left: 65%; animation-delay: 0.5s; animation-duration: 8s; }
+        .bg-heart:nth-child(5) { left: 85%; animation-delay: 2s; animation-duration: 5.5s; }
+        .bg-heart:nth-child(6) { left: 15%; animation-delay: 4s; animation-duration: 6.5s; }
+        .bg-heart:nth-child(7) { left: 75%; animation-delay: 5s; animation-duration: 7.5s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Стиль динамических огненных сердечек */
+        .fire-heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 30px;
+            z-index: 3;
+            pointer-events: none;
+            animation: fireFly 4s forwards linear;
+        }
+
+        @keyframes fireFly {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-105vh) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
+        }
+
+        /* Галерея */
         .gallery-section {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
@@ -135,11 +183,6 @@
             padding: 10px;
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.03) rotate(1deg);
         }
 
         .gallery-item img {
@@ -148,145 +191,97 @@
             object-fit: cover;
             border-radius: 10px;
         }
-
-        .heart {
-            position: absolute;
-            bottom: -50px;
-            user-select: none;
-            pointer-events: none;
-            animation: fly linear forwards;
-            z-index: 1;
-        }
-
-        @keyframes fly {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-110vh) translateX(var(--random-x)) rotate(var(--random-rot));
-                opacity: 0;
-            }
-        }
     </style>
 </head>
 <body>
 
+    <!-- Постоянно летящие фоновые сердечки -->
+    <div class="background-hearts">
+        <div class="bg-heart">❤️</div>
+        <div class="bg-heart">💖</div>
+        <div class="bg-heart">💕</div>
+        <div class="bg-heart">❤️</div>
+        <div class="bg-heart">💝</div>
+        <div class="bg-heart">❤️</div>
+        <div class="bg-heart">💖</div>
+    </div>
+
     <div class="glass-container">
         <h1>КСЮША Я ТЕБЯ ЛЮБЛЮ ❤️</h1>
         
-        <button class="btn" onclick="createFireHearts()">Любовь</button>
+        <button class="btn" onclick="triggerFire()">Любовь</button>
 
         <div class="timer-title">Мы вместе уже:</div>
         <div class="timer">
-            <div class="timer-item">
-                <span class="timer-num" id="days">0</span>
-                <span class="timer-label">дн</span>
-            </div>
-            <div class="timer-item">
-                <span class="timer-num" id="hours">0</span>
-                <span class="timer-label">ч</span>
-            </div>
-            <div class="timer-item">
-                <span class="timer-num" id="minutes">0</span>
-                <span class="timer-label">мин</span>
-            </div>
-            <div class="timer-item">
-                <span class="timer-num" id="seconds">0</span>
-                <span class="timer-label">сек</span>
-            </div>
+            <div class="timer-item"><span class="timer-num" id="days">0</span><span class="timer-label">дн</span></div>
+            <div class="timer-item"><span class="timer-num" id="hours">0</span><span class="timer-label">ч</span></div>
+            <div class="timer-item"><span class="timer-num" id="minutes">0</span><span class="timer-label">мин</span></div>
+            <div class="timer-item"><span class="timer-num" id="seconds">0</span><span class="timer-label">сек</span></div>
         </div>
     </div>
 
     <div class="gallery-section">
         <div class="gallery-title">Наши моменты ✨</div>
         <div class="gallery-grid">
-            <div class="gallery-item"><img src="1.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="2.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="3.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="4.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="5.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="6.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="7.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="8.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="9.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="10.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="11.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="12.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="13.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="14.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="15.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="16.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="17.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="18.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="19.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="20.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="21.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="22.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="23.jpg" alt="Наше фото"></div>
-            <div class="gallery-item"><img src="24.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="1.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="2.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="3.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="4.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="5.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="6.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="7.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="8.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="9.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="10.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="11.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="12.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="13.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="14.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="15.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="16.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="17.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="18.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="19.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="20.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="21.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="22.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="23.jpg" alt="Фото"></div>
+            <div class="gallery-item"><img src="24.jpg" alt="Фото"></div>
         </div>
     </div>
 
     <script>
+        // Таймер
         const startDate = new Date('2025-01-17T00:00:00');
-
         function updateTimer() {
-            const now = new Date();
-            const difference = now - startDate;
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = days;
-            document.getElementById('hours').innerText = hours;
-            document.getElementById('minutes').innerText = minutes;
-            document.getElementById('seconds').innerText = seconds;
+            const difference = new Date() - startDate;
+            document.getElementById('days').innerText = Math.floor(difference / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutes').innerText = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('seconds').innerText = Math.floor((difference % (1000 * 60)) / 1000);
         }
-
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        function spawnSingleHeart(icon) {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = icon;
-            
-            heart.style.left = Math.random() * 100 + 'vw';
-            
-            const size = Math.random() * 20 + 18;
-            heart.style.fontSize = size + 'px';
-            
-            heart.style.animationDuration = Math.random() * 4 + 3 + 's';
-            
-            heart.style.setProperty('--random-x', (Math.random() * 300 - 150) + 'px');
-            heart.style.setProperty('--random-rot', (Math.random() * 360) + 'deg');
-            
-            document.body.appendChild(heart);
-            
-            setTimeout(() => {
-                heart.remove();
-            }, 7000);
-        }
-
-        const normalHeartsList = ['❤️', '💖', '💝', '💕'];
-        setInterval(() => {
-            const randomIcon = normalHeartsList[Math.floor(Math.random() * normalHeartsList.length)];
-            spawnSingleHeart(randomIcon);
-        }, 600);
-
-        function createFireHearts() {
-            const fireIcons = ['🔥', '❤️', '🔥', '❤️'];
-            for (let i = 0; i < 35; i++) {
+        // Огненный взрыв по кнопке
+        function triggerFire() {
+            const icons = ['🔥', '❤️'];
+            for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
-                    const randomFireIcon = fireIcons[Math.floor(Math.random() * fireIcons.length)];
-                    spawnSingleHeart(randomFireIcon);
-                }, i * 60);
-<FollowUp>
-<FollowUp>
-Попробуйте обновить ваш файл этим кодом. Если всё запустилось как надо, хотите ли вы добавить:
-* **Музыкальное сопровождение** (чтобы при клике на «Любовь» включался трек)
-* **Эффект увеличения фото**, если Ксюша нажмет на какую-то из 24 карточек в галерее?
-</FollowUp>
+                    const f = document.createElement('div');
+                    f.classList.add('fire-heart');
+                   function triggerFire() {
+    const icons = ['🔥', '❤️'];
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const f = document.createElement('div');
+            f.classList.add('fire-heart');
+            f.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+            f.style.setProperty('--r', (Math.random() * 360) + 'deg');
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 4000);
+        }, i * 80);
+    }
+}
