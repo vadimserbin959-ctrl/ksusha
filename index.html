@@ -19,9 +19,9 @@
             min-height: 100vh;
             position: relative;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
 
-        /* Главный блок с таймером */
         .glass-container {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(10px);
@@ -45,28 +45,30 @@
         }
 
         .btn {
-            background-color: #ff4d6d;
+            background: linear-gradient(45deg, #ff4d6d, #ff85a2);
             color: white;
             border: none;
-            padding: 15px 35px;
-            font-size: 1.1rem;
+            padding: 15px 45px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            letter-spacing: 1px;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
-            transition: transform 0.2s, background-color 0.2s;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
             margin-bottom: 30px;
         }
 
         .btn:hover {
-            background-color: #ff758f;
+            background: linear-gradient(45deg, #ff758f, #ffb3c1);
             transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
         }
 
         .btn:active {
             transform: scale(0.95);
         }
 
-        /* Стили таймера */
         .timer-title {
             font-size: 1.1rem;
             color: #555;
@@ -107,7 +109,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
             padding: 40px 20px;
             border-radius: 30px 30px 0 0;
             box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.05);
@@ -148,12 +150,10 @@
             border-radius: 10px;
         }
 
-        /* Летающие сердечки */
+        /* Общие стили для анимации всех сердечек */
         .heart {
             position: absolute;
             bottom: -50px;
-            font-size: 2rem;
-            color: #ff4d6d;
             user-select: none;
             pointer-events: none;
             animation: fly linear forwards;
@@ -166,7 +166,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(-105vh) translateX(var(--random-x)) rotate(var(--random-rot));
+                transform: translateY(-110vh) translateX(var(--random-x)) rotate(var(--random-rot));
                 opacity: 0;
             }
         }
@@ -174,11 +174,10 @@
 </head>
 <body>
 
-    <!-- Контейнер с таймером -->
     <div class="glass-container">
         <h1>КСЮША Я ТЕБЯ ЛЮБЛЮ ❤️</h1>
         
-        <button class="btn" onclick="createHearts()">Включить сердечки</button>
+        <button class="btn" onclick="createFireHearts()">Любовь</button>
 
         <div class="timer-title">Мы вместе уже:</div>
         <div class="timer">
@@ -201,7 +200,6 @@
         </div>
     </div>
 
-    <!-- Галерея с вашими фото ниже -->
     <div class="gallery-section">
         <div class="gallery-title">Наши моменты ✨</div>
         <div class="gallery-grid">
@@ -215,11 +213,24 @@
             <div class="gallery-item"><img src="8.jpg" alt="Наше фото"></div>
             <div class="gallery-item"><img src="9.jpg" alt="Наше фото"></div>
             <div class="gallery-item"><img src="10.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="11.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="12.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="13.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="14.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="15.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="16.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="17.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="18.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="19.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="20.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="21.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="22.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="23.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="24.jpg" alt="Наше фото"></div>
         </div>
     </div>
 
     <script>
-        // Дата отсчета: 17 января 2025 года
         const startDate = new Date('2025-01-17T00:00:00');
 
         function updateTimer() {
@@ -240,32 +251,32 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        function createHearts() {
-            for (let i = 0; i < 25; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.classList.add('heart');
-                    heart.innerHTML = '❤️';
-                    
-                    heart.style.left = Math.random() * 100 + 'vw';
-                    
-                    const size = Math.random() * 20 + 20;
-                    heart.style.fontSize = size + 'px';
-                    
-                    heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-                    
-                    heart.style.setProperty('--random-x', (Math.random() * 200 - 100) + 'px');
-                    heart.style.setProperty('--random-rot', (Math.random() * 360) + 'deg');
-                    
-                    document.body.appendChild(heart);
-                    
-                    setTimeout(() => {
-                        heart.remove();
-                    }, 5000);
-                }, i * 100);
-            }
+        // Функция создания одного любого сердечка
+        function spawnSingleHeart(icon) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = icon;
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            const size = Math.random() * 20 + 18; // размер от 18px до 38px
+            heart.style.fontSize = size + 'px';
+            
+            heart.style.animationDuration = Math.random() * 4 + 3 + 's'; // плавный полет 3-7 сек
+            
+            heart.style.setProperty('--random-x', (Math.random() * 300 - 150) + 'px');
+            heart.style.setProperty('--random-rot', (Math.random() * 360) + 'deg');
+            
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
         }
-    </script>
-
-</body>
-</html>
+        // Постоянный автоматический полет обычных сердечек
+        const normalHeartsList = ['❤️', '💖', '💝', '💕'];
+        setInterval(() => {
+            const randomIcon = normalHeartsList[Math.floor(Math.random() * normalHeartsList.length)];
+            spawnSingleHeart(randomIcon);
+        }, 600); // Новое фоновое сердечко появляется каждые 0.6 секунды
+// Взрыв ОГНЕННЫХ сердечек при клике на кнопку «Любовь»function createFireHearts() {const fireIcons = ['🔥', '❤️', '🔥', '❤️'];for (let i = 0; i < 35; i++) {setTimeout(() => {const randomFireIcon = fireIcons[Math.floor(Math.random() * fireIcons.length)];spawnSingleHeart(randomFireIcon);}, i * 60);}}
