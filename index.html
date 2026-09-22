@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Ксюши ❤️</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Размытый фон с фотографией */
+            background: linear-gradient(rgba(255, 227, 227, 0.4), rgba(255, 240, 245, 0.5)), url('photo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Контейнер для текста, чтобы он легко читался на любом фоне */
+        .glass-container {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 500px;
+            z-index: 5;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff4d6d;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 0 0 20px 0;
+            font-weight: bold;
+        }
+
+        .btn {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 30px;
+        }
+
+        .btn:hover {
+            background-color: #ff758f;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Стили таймера */
+        .timer-title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .timer-item {
+            background: #ff4d6d;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            min-width: 60px;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
+        }
+
+        .timer-num {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .timer-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* Анимация сердечек */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 2rem;
+            color: #ff4d6d;
+            user-select: none;
+            pointer-events: none;
+            animation: fly linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-105vh) translateX(var(--random-x)) rotate(var(--random-rot));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+        <h1>КСЮША Я ТЕБЯ ЛЮБЛЮ ❤️</h1>
+        
+        <button class="btn" onclick="createHearts()">Включить сердечки</button>
+
+        <div class="timer-title">Мы вместе уже:</div>
+        <div class="timer">
+            <div class="timer-item">
+                <span class="timer-num" id="days">0</span>
+                <span class="timer-label">дн</span>
+            </div>
+            <div class="timer-item">
+                <span class="timer-num" id="hours">0</span>
+                <span class="timer-label">ч</span>
+            </div>
+            <div class="timer-item">
+                <span class="timer-num" id="minutes">0</span>
+                <span class="timer-label">мин</span>
+            </div>
+            <div class="timer-item">
+                <span class="timer-num" id="seconds">0</span>
+                <span class="timer-label">сек</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Дата отсчета: 17 января 2025 года
+        const startDate = new Date('2025-01-17T00:00:00');
+
+        function updateTimer() {
+            const now = new Date();
+            const difference = now - startDate;
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
+        }
+
+        // Обновляем таймер каждую секунду
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Функция для эффекта летающих сердечек
+        function createHearts() {
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.innerHTML = '❤️';
+                    
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    
+                    const size = Math.random() * 20 + 20;
+                    heart.style.fontSize = size + 'px';
+                    
+                    heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                    
+                    heart.style.setProperty('--random-x', (Math.random() * 200 - 100) + 'px');
+                    heart.style.setProperty('--random-rot', (Math.random() * 360) + 'deg');
+                    
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 5000);
+                }, i * 100);
+            }
+        }
+    </script>
+
+</body>
+</html>
