@@ -251,37 +251,46 @@
     </div>
 
     <script>
-        // Таймер
+        // Дата отсчета: 17 января 2025 года
         const startDate = new Date('2025-01-17T00:00:00');
+
         function updateTimer() {
-            const difference = new Date() - startDate;
-            document.getElementById('days').innerText = Math.floor(difference / (1000 * 60 * 60 * 24));
-            document.getElementById('hours').innerText = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById('minutes').innerText = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('seconds').innerText = Math.floor((difference % (1000 * 60)) / 1000);
+            const now = new Date();
+            const difference = now - startDate;
+
+            // Рассчитываем дни, часы, минуты и секунды
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // Выводим их на экран в соответствующие блоки
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
         }
+
+        // Запускаем обновление каждую секунду (1000 миллисекунд)
         setInterval(updateTimer, 1000);
+        
+        // Вызываем один раз сразу, чтобы цифры появились мгновенно при загрузке
         updateTimer();
 
-        // Огненный взрыв по кнопке
+        // Функция для взрыва огненных сердечек по кнопке «Любовь»
         function triggerFire() {
             const icons = ['🔥', '❤️'];
             for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
                     const f = document.createElement('div');
                     f.classList.add('fire-heart');
-                   function triggerFire() {
-    const icons = ['🔥', '❤️'];
-    for (let i = 0; i < 30; i++) {
-        setTimeout(() => {
-            const f = document.createElement('div');
-            f.classList.add('fire-heart');
-            f.innerHTML = icons[Math.floor(Math.random() * icons.length)];
-            f.style.left = Math.random() * 100 + 'vw';
-            f.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
-            f.style.setProperty('--r', (Math.random() * 360) + 'deg');
-            document.body.appendChild(f);
-            setTimeout(() => f.remove(), 4000);
-        }, i * 80);
-    }
-}
+                    f.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                    f.style.left = Math.random() * 100 + 'vw';
+                    f.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+                    f.style.setProperty('--r', (Math.random() * 360) + 'deg');
+                    document.body.appendChild(f);
+                    setTimeout(() => f.remove(), 4000);
+                }, i * 80);
+            }
+        }
+    </script>
