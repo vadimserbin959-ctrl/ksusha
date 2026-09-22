@@ -9,21 +9,19 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            /* Размытый фон с фотографией */
             background: linear-gradient(rgba(255, 227, 227, 0.4), rgba(255, 240, 245, 0.5)), url('photo.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #333;
             text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
             position: relative;
+            box-sizing: border-box;
         }
 
-        /* Контейнер для текста, чтобы он легко читался на любом фоне */
+        /* Главный блок с таймером */
         .glass-container {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(10px);
@@ -34,6 +32,8 @@
             max-width: 90%;
             width: 500px;
             z-index: 5;
+            margin-top: 10vh;
+            margin-bottom: 50px;
         }
 
         h1 {
@@ -101,7 +101,54 @@
             opacity: 0.9;
         }
 
-        /* Анимация сердечек */
+        /* Блок галереи */
+        .gallery-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 1000px;
+            padding: 40px 20px;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.05);
+            z-index: 5;
+            box-sizing: border-box;
+        }
+
+        .gallery-title {
+            font-size: 1.8rem;
+            color: #ff4d6d;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+
+        .gallery-item {
+            background: white;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* Летающие сердечки */
         .heart {
             position: absolute;
             bottom: -50px;
@@ -127,6 +174,7 @@
 </head>
 <body>
 
+    <!-- Контейнер с таймером -->
     <div class="glass-container">
         <h1>КСЮША Я ТЕБЯ ЛЮБЛЮ ❤️</h1>
         
@@ -153,6 +201,23 @@
         </div>
     </div>
 
+    <!-- Галерея с вашими фото ниже -->
+    <div class="gallery-section">
+        <div class="gallery-title">Наши моменты ✨</div>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="1.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="2.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="3.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="4.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="5.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="6.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="7.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="8.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="9.jpg" alt="Наше фото"></div>
+            <div class="gallery-item"><img src="10.jpg" alt="Наше фото"></div>
+        </div>
+    </div>
+
     <script>
         // Дата отсчета: 17 января 2025 года
         const startDate = new Date('2025-01-17T00:00:00');
@@ -172,11 +237,9 @@
             document.getElementById('seconds').innerText = seconds;
         }
 
-        // Обновляем таймер каждую секунду
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // Функция для эффекта летающих сердечек
         function createHearts() {
             for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
